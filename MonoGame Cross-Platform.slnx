@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Match3Game/Match3Game.csproj" />
+  </Folder>
+</Solution>

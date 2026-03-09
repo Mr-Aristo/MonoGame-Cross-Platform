@@ -1,13 +1,4 @@
-﻿using Match3Game.Screens;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Match3Game.Managers;
+﻿namespace Match3Game.Managers;
 
 /// <summary>
 /// the ScreenManager class is responsible for managing the current screen of the game.

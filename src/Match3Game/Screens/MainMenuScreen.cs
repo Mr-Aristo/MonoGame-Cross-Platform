@@ -1,9 +1,9 @@
-﻿using Match3Game.Managers;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-namespace Match3Game.Screens;
+﻿namespace Match3Game.Screens;
 
+/// <summary>
+/// This class represents the Main Menu screen of the game.
+/// It displays a "Play" button that the player can click to start the game.
+/// </summary>
 public class MainMenuScreen : BaseScreen
 {
     private Rectangle _playButtonRect;
@@ -12,10 +12,9 @@ public class MainMenuScreen : BaseScreen
     private SpriteFont _font;
     public MainMenuScreen(GraphicsDevice graphicsDevice, ContentManager content)
     {
-        // Ekranın ortasına denk gelecek 200x80 piksellik bir buton alanı tanımlıyoruz
+        
         _playButtonRect = new Rectangle(300, 200, 200, 80);
-
-        // 1x1 piksellik beyaz bir resim (doku) üretiyoruz
+       
         _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
         _pixelTexture.SetData(new[] { Color.White });
         _content = content;
@@ -23,12 +22,13 @@ public class MainMenuScreen : BaseScreen
     }
     public override void Update(GameTime gameTime)
     {
-        // Eğer fare (MouseRectangle), Play butonunun (PlayButtonRect) üzerindeyse VE sol tıklandıysa:
+        // Check if the mouse is over the play button and if it's clicked
         if (_playButtonRect.Intersects(InputManager.MouseRectangle))
         {
+            // Change the button color on hover (handled in Draw) and check for click
             if (InputManager.IsLeftMouseClicked())
             {
-                // Mülakat Görevi Madde 2: Play'e basılınca Oyun Ekranı açılır!
+                // Transition to the GameplayScreen when the play button is clicked
                 ScreenManager.ChangeScreen(new GameplayScreen(_pixelTexture.GraphicsDevice, _content));
             }
         }
@@ -38,10 +38,8 @@ public class MainMenuScreen : BaseScreen
     {
         spriteBatch.GraphicsDevice.Clear(Color.DarkBlue);
 
-        // Fare butonun üzerindeyse rengi Gri olsun (Hover efekti), değilse Kırmızı olsun
         Color buttonColor = _playButtonRect.Intersects(InputManager.MouseRectangle) ? Color.LightGray : Color.Red;
-
-        // Beyaz pikselimizi, _playButtonRect boyutlarına esneterek ve seçtiğimiz renge boyayarak çiziyoruz
+        
         spriteBatch.Draw(_pixelTexture, _playButtonRect, buttonColor);
         spriteBatch.DrawString(_font, "PLAY", new Vector2(360, 225), Color.White);
     }

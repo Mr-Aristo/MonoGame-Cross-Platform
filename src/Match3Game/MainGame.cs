@@ -1,64 +1,54 @@
-﻿using Match3Game.Managers;
-using Match3Game.Screens;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿namespace Match3Game;
 
-namespace Match3Game
+public class MainGame : Game
 {
-    public class MainGame : Game
+    private GraphicsDeviceManager _graphics;
+    private SpriteBatch _spriteBatch;
+
+    public MainGame()
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        _graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = "Content";
+        IsMouseVisible = true;
+    }
 
-        public MainGame()
-        {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-        }
+    protected override void Initialize()
+    {
+        // TODO: Add your initialization logic here
 
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
+        ScreenManager.ChangeScreen(new MainMenuScreen(GraphicsDevice, Content));
+        base.Initialize();
+    }
 
-            ScreenManager.ChangeScreen(new MainMenuScreen(GraphicsDevice, Content));
-            base.Initialize();
-        }
+    protected override void LoadContent()
+    {
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+        // TODO: use this.Content to load your game content here
+    }
 
-            // TODO: use this.Content to load your game content here
-        }
+    protected override void Update(GameTime gameTime)
+    {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Exit();
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+        // TODO: Add your update logic here
 
-            // TODO: Add your update logic here
+        InputManager.Update();
+        ScreenManager.Update(gameTime);
 
-            InputManager.Update();
-            ScreenManager.Update(gameTime);
+        base.Update(gameTime);
+    }
 
-            base.Update(gameTime);
-        }
+    protected override void Draw(GameTime gameTime)
+    {     // TODO: Add your drawing code here
 
-        protected override void Draw(GameTime gameTime)
-        {     // TODO: Add your drawing code here
+        _spriteBatch.Begin();
 
-            _spriteBatch.Begin();
+        ScreenManager.Draw(_spriteBatch);
 
-            // Hangi ekrandaysak (şu an MainMenuScreen), ona "Al bu spriteBatch'i ve kendi içeriğini çiz" diyoruz.
-            ScreenManager.Draw(_spriteBatch);
+        _spriteBatch.End();
 
-            // Çizim işlemini bitiriyoruz (Bu çok önemlidir, End demezsek ekranda hiçbir şey görünmez)
-            _spriteBatch.End();
-
-            base.Draw(gameTime);
-        }
+        base.Draw(gameTime);
     }
 }

@@ -1,62 +1,59 @@
-﻿using Match3Game.Managers;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+﻿namespace Match3Game.Screens;
 
-namespace Match3Game.Screens
+/// <summary>
+/// This class represents the Game Over screen that is displayed when the player loses the game.
+/// </summary>
+public class GameOverScreen : BaseScreen
 {
-    public class GameOverScreen : BaseScreen
+    private Rectangle _okButtonRect;
+    private Texture2D _pixelTexture;
+    private SpriteFont _font;
+    private ContentManager _content;
+    private int _finalScore;
+
+ 
+    public GameOverScreen(GraphicsDevice graphicsDevice, ContentManager content, int finalScore)
     {
-        private Rectangle _okButtonRect;
-        private Texture2D _pixelTexture;
-        private SpriteFont _font;
-        private ContentManager _content;
-        private int _finalScore;
+        _content = content;
+        _finalScore = finalScore;
 
-        // Ekrana geçerken GraphicsDevice ve Content dışında, oyuncunun Skorunu da alıyoruz!
-        public GameOverScreen(GraphicsDevice graphicsDevice, ContentManager content, int finalScore)
+        // Define the rectangle for the "OK" button
+        _okButtonRect = new Rectangle(350, 300, 100, 50);
+
+        _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
+        _pixelTexture.SetData(new[] { Color.White });
+
+        // Load the font for displaying text
+        _font = _content.Load<SpriteFont>("GameFont");
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        // Check if the mouse is over the "OK" button and if it is clicked
+        if (_okButtonRect.Intersects(InputManager.MouseRectangle))
         {
-            _content = content;
-            _finalScore = finalScore;
-
-            // "Ok" butonu için 100x50 piksellik bir alan (Ekranın ortasına yakın)
-            _okButtonRect = new Rectangle(350, 300, 100, 50);
-
-            _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
-            _pixelTexture.SetData(new[] { Color.White });
-
-            // Yazıları yazabilmek için Gameplay'de kullandığımız fontu burada da yüklüyoruz
-            _font = _content.Load<SpriteFont>("GameFont");
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            // Fare "Ok" butonunun üzerindeyse ve tıklandıysa:
-            if (_okButtonRect.Intersects(InputManager.MouseRectangle))
+            // If the left mouse button is clicked, change to the main menu screen
+            if (InputManager.IsLeftMouseClicked())
             {
-                if (InputManager.IsLeftMouseClicked())
-                {
-                    // Madde 14: Ana Menüye geri dön!
-                    ScreenManager.ChangeScreen(new MainMenuScreen(_pixelTexture.GraphicsDevice, _content));
-                }
+                // Change to the main menu screen
+                ScreenManager.ChangeScreen(new MainMenuScreen(_pixelTexture.GraphicsDevice, _content));
             }
         }
+    }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            // Oyun bittiği için arka planı dramatik bir Koyu Kırmızı yapalım
-            spriteBatch.GraphicsDevice.Clear(Color.DarkRed);
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        // Clear the screen with a dark red color to indicate game over
+        spriteBatch.GraphicsDevice.Clear(Color.DarkRed);
+      
+        spriteBatch.DrawString(_font, "GAME OVER", new Vector2(320, 150), Color.White);
+        spriteBatch.DrawString(_font, $"Final Score: {_finalScore}", new Vector2(330, 200), Color.Yellow);
 
-            // "GAME OVER" ve "Final Score" yazıları
-            spriteBatch.DrawString(_font, "GAME OVER", new Vector2(320, 150), Color.White);
-            spriteBatch.DrawString(_font, $"Final Score: {_finalScore}", new Vector2(330, 200), Color.Yellow);
+     
+        Color buttonColor = _okButtonRect.Intersects(InputManager.MouseRectangle) ? Color.LightGray : Color.White;
+        spriteBatch.Draw(_pixelTexture, _okButtonRect, buttonColor);
 
-            // "Ok" butonunun çizimi (Fare üzerindeyse Gri, değilse Beyaz olsun)
-            Color buttonColor = _okButtonRect.Intersects(InputManager.MouseRectangle) ? Color.LightGray : Color.White;
-            spriteBatch.Draw(_pixelTexture, _okButtonRect, buttonColor);
-
-            // Butonun tam ortasına Siyah renkle "OK" yazalım
-            spriteBatch.DrawString(_font, "OK", new Vector2(380, 315), Color.Black);
-        }
+        
+        spriteBatch.DrawString(_font, "OK", new Vector2(380, 315), Color.Black);
     }
 }

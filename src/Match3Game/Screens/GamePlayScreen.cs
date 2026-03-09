@@ -1,11 +1,4 @@
-﻿using Match3Game.Core;
-using Match3Game.Managers;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-
-namespace Match3Game.Screens;
+﻿namespace Match3Game.Screens;
 
 /// <summary>
 /// Class GameplayScreen is responsible for managing the main gameplay of the match-3 game.
@@ -32,7 +25,7 @@ public class GameplayScreen : BaseScreen
     {
         _board = new Board();
         _content = content;
-
+        
         //creating a 1x1 white texture to use for drawing rectangles (gems, bonuses, etc.)
         _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
         _pixelTexture.SetData(new[] { Color.White });
@@ -60,6 +53,9 @@ public class GameplayScreen : BaseScreen
         return new Vector2(_boardOffset.X + (x * CellSize) + 2, _boardOffset.Y + (y * CellSize) + 2);
     }
 
+    /// <summary>
+    /// Update method is responsible for handling the game logic that needs to be processed every frame.
+    /// </summary>
     public override void Update(GameTime gameTime)
     {
         for (int x = 0; x < Board.Width; x++)
@@ -121,7 +117,7 @@ public class GameplayScreen : BaseScreen
     }
 
     /// <summary>
-    ///  
+    ///  the HandleCellClick method is responsible for handling the logic when a player clicks on a cell in the game board.
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -153,6 +149,9 @@ public class GameplayScreen : BaseScreen
         }
     }
 
+    /// <summary>
+    /// The SwapGems method is responsible for swapping two gems on the board based on their grid coordinates.
+    /// </summary>
     private void SwapGems(Point p1, Point p2)
     {
         _board.Grid[p1.X, p1.Y].TargetPosition = GetVisualPosition(p2.X, p2.Y);

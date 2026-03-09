@@ -192,7 +192,7 @@ public class Board
         }
 
         // Update destroyers: move them and destroy any gems they pass through
-        foreach (var d in Destroyers)
+        foreach (var d in Destroyers.ToList())
         {
             d.Position += d.Direction * 400f * dt;
 
